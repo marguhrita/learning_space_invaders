@@ -4,6 +4,7 @@ from pygame.locals import *
 import random
 
 
+#region init
 pygame.mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
 pygame.init()
@@ -18,13 +19,10 @@ screen_width = 600
 screen_height = 800
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('Space Invanders')
-
 
 #define fonts
 font30 = pygame.font.SysFont('Constantia', 30)
 font40 = pygame.font.SysFont('Constantia', 40)
-
 
 #load sounds
 explosion_fx = pygame.mixer.Sound("img/explosion.wav")
@@ -37,21 +35,10 @@ laser_fx = pygame.mixer.Sound("img/laser.wav")
 laser_fx.set_volume(0.25)
 
 
-#define game variables
-rows = 5
-cols = 5
-alien_cooldown = 1000#bullet cooldown in milliseconds
-last_alien_shot = pygame.time.get_ticks()
-countdown = 3
-last_count = pygame.time.get_ticks()
-game_over = 0#0 is no game over, 1 means player has won, -1 means player has lost
-
 #define colours
 red = (255, 0, 0)
 green = (0, 255, 0)
 white = (255, 255, 255)
-
-
 
 #load image
 bg = pygame.image.load("img/bg.png")
@@ -65,6 +52,23 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
+
+#create sprite groups
+spaceship_group = pygame.sprite.Group()
+bullet_group = pygame.sprite.Group()
+alien_group = pygame.sprite.Group()
+alien_bullet_group = pygame.sprite.Group()
+explosion_group = pygame.sprite.Group()
+
+#create player
+spaceship = Spaceship(int(screen_width / 2), screen_height - 100, 3)
+spaceship_group.add(spaceship)
+
+
+
+#endregion init
+
+#region sprite classes
 
 
 #create spaceship class
@@ -220,15 +224,18 @@ class Explosion(pygame.sprite.Sprite):
 		if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
 			self.kill()
 
+#endregion
 
 
 
-#create sprite groups
-spaceship_group = pygame.sprite.Group()
-bullet_group = pygame.sprite.Group()
-alien_group = pygame.sprite.Group()
-alien_bullet_group = pygame.sprite.Group()
-explosion_group = pygame.sprite.Group()
+#define game variables
+rows = 5
+cols = 5
+alien_cooldown = 1000#bullet cooldown in milliseconds
+last_alien_shot = pygame.time.get_ticks()
+countdown = 3
+last_count = pygame.time.get_ticks()
+game_over = 0 #0 is no game over, 1 means player has won, -1 means player has lost
 
 
 def create_aliens():
@@ -241,20 +248,18 @@ def create_aliens():
 create_aliens()
 
 
-#create player
-spaceship = Spaceship(int(screen_width / 2), screen_height - 100, 3)
-spaceship_group.add(spaceship)
 
 
-
+pygame.display.set_caption('Space Invaders')
 run = True
+
+
 while run:
 
 	clock.tick(fps)
 
 	#draw background
 	draw_bg()
-
 
 	if countdown == 0:
 		#create random alien bullets
@@ -274,7 +279,6 @@ while run:
 		if game_over == 0:
 			#update spaceship
 			game_over = spaceship.update()
-
 			#update sprite groups
 			bullet_group.update()
 			alien_group.update()
