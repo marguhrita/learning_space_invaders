@@ -3,8 +3,38 @@ from pygame import mixer
 from pygame.locals import *
 import random
 
+#region Task 7
+#<===============================TASK 7==========================================>
+#<===============================CODE STARTS HERE==========================================>
+def validate_input():
+	modes = ["easy", "medium", "hard"]
+	# Show the user the possible modes, and ask them which one they would like to choose
+	print("Please enter a difficulty:")
+	for counter in range(0,len(modes)):
+		print(modes[counter])
+	
+	
+	#loop until a valid answer is given!
+	valid = False
+	while not valid:
+		answer = input()
+		#check if any of the modes are the same as the answer - return true if it is
+		for counter in range(0,len(modes)):
+			if modes[counter] == answer.lower():
+				valid = True
+		
+		if not valid:
+			print(answer + " is not a valid difficulty - please try again")
+	
+	#return the given answer once a valid one is given
+	return answer.lower()
 
-#region init
+difficulty = validate_input()
+
+#<===============================CODE ENDS HERE==========================================>
+#endregion
+
+#region initialisation
 pygame.mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
 pygame.init()
@@ -73,27 +103,14 @@ class Spaceship(pygame.sprite.Sprite):
 
 
 	def update(self, ship_move, ship_shoot):
-		
-		
 		game_over = 0
 
 		key = pygame.key.get_pressed()
 		self.rect.x = ship_move(self.rect, key)
-
 		ship_shoot(self.rect, key)
-		"""#record current time
-		time_now = pygame.time.get_ticks()
-		#shoot
-		if key[pygame.K_SPACE] and time_now - self.last_shot > cooldown:
-			laser_fx.play()
-			bullet = Bullets(self.rect.centerx, self.rect.top)
-			bullet_group.add(bullet)
-			self.last_shot = time_now"""
-
 
 		#update mask
 		self.mask = pygame.mask.from_surface(self.image)
-
 
 		#draw health bar
 		pygame.draw.rect(screen, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
@@ -138,10 +155,14 @@ class Aliens(pygame.sprite.Sprite):
 		self.rect.center = [x, y]
 		self.move_counter = 0
 		self.move_direction = 1
+		self.x = self.rect.centerx
+		self.y = self.rect.centery
 
 	def update(self):
 		self.rect.x += self.move_direction
 		self.move_counter += 1
+		self.x = self.rect.centerx
+		self.y = self.rect.centery
 		if abs(self.move_counter) > 75:
 			self.move_direction *= -1
 			self.move_counter *= self.move_direction
@@ -221,11 +242,7 @@ spaceship_group.add(spaceship)
 
 #endregion
 
-
-
 #define game variables
-rows = 5
-cols = 5
 alien_cooldown = 1000 #bullet cooldown in milliseconds
 last_alien_shot = pygame.time.get_ticks()
 last_count = pygame.time.get_ticks()
@@ -233,20 +250,41 @@ last_shot = pygame.time.get_ticks()
 countdown = 3
 game_over = 0 #0 is no game over, 1 means player has won, -1 means player has lost
 
+#region Task 8
+#<=====================================TASK 1==========================================>
+#<==================================START CODE HERE==========================================>
+if difficulty == "easy":
+	alien_cooldown = 1000 #bullet cooldown in milliseconds
+elif difficulty == "medium":
+	alien_cooldown = 700 #bullet cooldown in milliseconds
+else:
+	alien_cooldown = 200 #bullet cooldown in milliseconds
 
-#TODO Add aliens to group activity
+#<==================================END CODE HERE==========================================>
+#endregion
+
+#region Task 1
+#<=====================================TASK 1==========================================>
 #Make them create aliens first in a row, then in columns, then together
 def create_aliens():
+#<==============================START CODE HERE=============================>
+	rows = 5
+	cols = 5
 	#generate aliens
 	for row in range(rows):
 		for item in range(cols):
 			alien = Aliens(100 + item * 100, 100 + row * 70)
 			alien_group.add(alien)
 
-create_aliens()
+#<==============================END CODE HERE=============================>
 
-#TODO move spaceship left and right
+create_aliens()
+#endregion
+
+#region Task 2
+#<==================================TASK 2==========================================>
 def spaceship_move(ship, key):
+#<==============================START CODE HERE=============================>
 	#set movement speed
 	speed = 8
 	#get key press
@@ -257,10 +295,16 @@ def spaceship_move(ship, key):
 
 	return ship.x
 
-#TODO shoot from spaceship
+#<==============================END CODE HERE=============================>
+
+#endregion
+
+#region Task 3
+#<==================================TASK 3==========================================>
 def spaceship_shoot(ship, key):
 	#Get time of last shot as a global variable
 	global last_shot
+#<==============================START CODE HERE=============================>
 	#record current time
 	time_now = pygame.time.get_ticks()
 	#set a cooldown variable
@@ -271,7 +315,10 @@ def spaceship_shoot(ship, key):
 		bullet = Bullets(ship.centerx, ship.top)
 		bullet_group.add(bullet)
 		last_shot = time_now
+#<==============================END CODE HERE=============================>
+#endregion
 
+#region Helper Functions
 #Helper function to update sprites
 def update_sprites():
 	#update spaceship
@@ -282,36 +329,54 @@ def update_sprites():
 	alien_bullet_group.update()
 	return game_over
 
+def shoot_alien_bullet(x,y):
+	global last_alien_shot
+	alien_bullet = Alien_Bullets(x, y)
+	alien_bullet_group.add(alien_bullet)
+	last_alien_shot = time_now
+#endregion
+
 #region main game loop
 pygame.display.set_caption('Space Invaders')
 run = True
 while run:
-
 	clock.tick(fps)
 	#draw background
 	draw_bg()
 
-	#<==============================================START CODE HERE=======================================================>
-
-
-	#TODO Make random enemy shoot a shot activity
-	"""if countdown == 0:
+	#region Task 4
+	#<==================================TASK 4==========================================>
+	#<==============================START CODE HERE=====================================>
+	if countdown == 0:
 		#create random alien bullets
 		#record current time
 		time_now = pygame.time.get_ticks()
 		#shoot
-		if time_now - last_alien_shot > alien_cooldown and len(alien_bullet_group) < 5 and len(alien_group) > 0:
+		if time_now - last_alien_shot > alien_cooldown and len(alien_bullet_group) < 40 and len(alien_group) > 0:
 			attacking_alien = random.choice(alien_group.sprites())
-			alien_bullet = Alien_Bullets(attacking_alien.rect.centerx, attacking_alien.rect.bottom)
-			alien_bullet_group.add(alien_bullet)
-			last_alien_shot = time_now"""
+			shoot_alien_bullet(attacking_alien.x, attacking_alien.y)
 	
+	#<==============================END CODE HERE=====================================>
+	
+	#endregion
 
-	#TODO check if all the aliens have been killed
+	#region Task 5
+	#Set game over to -1 if the spaceship is out of health!
+	if spaceship.health_remaining <= 0:
+		game_over = -1
+
+	#<==================================TASK 5========================================>
+	#<==============================START CODE HERE===================================>
 	if len(alien_group) == 0:
 		game_over = 1
 
-	#TODO check game states (do update first)
+	#<==============================END CODE HERE=====================================>
+
+	#endregion
+
+	#region Task 6
+	#<==================================TASK 6========================================>
+	#<==============================START CODE HERE===================================>
 	if game_over == 0:
 		update_sprites()
 	else:
@@ -320,16 +385,11 @@ while run:
 		if game_over == 1:
 			draw_text('YOU WIN!', font40, white, int(screen_width / 2 - 100), int(screen_height / 2 + 50))
 
+	#<==============================END CODE HERE=====================================>
 
+	#endregion
 
-
-	
-	
-	
-	
-	
-	#<=============================================STOP CODE HERE===========================================>
-
+	#region Pygame
 	if countdown > 0:
 		draw_text('GET READY!', font40, white, int(screen_width / 2 - 110), int(screen_height / 2 + 50))
 		draw_text(str(countdown), font40, white, int(screen_width / 2 - 10), int(screen_height / 2 + 100))
@@ -341,7 +401,6 @@ while run:
 
 	#update explosion group	
 	explosion_group.update()
-
 
 	#draw sprite groups
 	spaceship_group.draw(screen)
@@ -358,8 +417,9 @@ while run:
 
 
 	pygame.display.update()
+	#endregion
 
 pygame.quit()
-
+	
 
 #endregion
