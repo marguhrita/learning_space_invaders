@@ -30,7 +30,7 @@ console.print(f"You find yourself in a dark, gloomy cave. What do you do?", styl
 
 while not next_room:
     console.print("Choose an action: explore/investigate/rest", style = "bold white")
-    action = input(">")
+    action = input("> ")
 
     if action == "explore":
         next_room = True
@@ -44,17 +44,21 @@ while not next_room:
 
         if random_number == 0:
             console.print("You found a healing herb! +2 health.", style="bold green")
-            player_health == player_health + 2
+            player_health = player_health + 2
         elif random_number == 1:
-            damage = random.randint(0,5)
+            damage = random.randint(1,5)
             console.print("A trap falls down from the ceiling, slightly crushing your toes!! You lost " + str(damage) + " health", style="bold red")
-            player_health == player_health - damage
+            player_health = player_health - damage
             console.print("You are now at " + str(player_health) + " health!!", style="bold green")
 
     if action == "rest":
             healing = random.randint(0,3)
             console.print("You take a rest and regain some health. +" + str(healing) + " health.", style="bold green")
-            player_health == player_health + 2
+            player_health = player_health + healing
+
+    if action == "health":
+        console.print("You are now at " + str(player_health) + " health!!", style="bold green")
+
 
     # Check if the player is still alive
     if player_health <= 0:
@@ -74,7 +78,7 @@ enemies = ["mole", "bat"]
 next_room = False
 while not next_room:
     console.print("Choose an action: fight/explore/investigate/rest", style = "bold white")
-    action = input(">")
+    action = input("> ")
 
     if action == "fight":
         
@@ -103,18 +107,18 @@ while not next_room:
 
         if random_number == 0:
             console.print("You found a healing herb! +2 health.", style="bold green")
-            player_health == player_health + 2
+            player_health = player_health + 2
             console.print("You are now at " + str(player_health) + " health!!", style="bold green")
         elif random_number == 1:
             damage = random.randint(0,5)
             console.print("A trap falls down from the ceiling, slightly crushing your toes!! You lost " + damage + " health", style="bold red")
-            player_health == player_health - damage
+            player_health = player_health - damage
             console.print("You are now at " + str(player_health) + " health!!", style="bold red")
 
     if action == "rest":
-            healing = random.randint(0,3)
+            healing = random.randint(1,3)
             console.print("You take a rest and regain some health. +" + str(healing) + " health.", style="bold green")
-            player_health == player_health + 2
+            player_health = player_health + healing
 
     # Check if the player is still alive
     if player_health <= 0:
