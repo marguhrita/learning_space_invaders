@@ -119,6 +119,7 @@ while not next_room:
     # Check if the player is still alive
     if player_health <= 0:
             console.print("You have succumbed to your injuries. Game Over.", style="bold red")
+            exit()
 
 
 
