@@ -111,7 +111,7 @@ while not next_room:
             console.print("You are now at " + str(player_health) + " health!!", style="bold green")
         elif random_number == 1:
             damage = random.randint(0,5)
-            console.print("A trap falls down from the ceiling, slightly crushing your toes!! You lost " + damage + " health", style="bold red")
+            console.print("A trap falls down from the ceiling, slightly crushing your toes!! You lost " + str(damage) + " health", style="bold red")
             player_health = player_health - damage
             console.print("You are now at " + str(player_health) + " health!!", style="bold red")
 
