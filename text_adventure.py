@@ -2,7 +2,7 @@ from rich.console import Console
 from rich.text import Text
 import random
 
-
+#TODO implement this in game
 #region input validation
 def validate_input(prompt, valid_inputs):
     while True:
