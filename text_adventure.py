@@ -4,7 +4,7 @@ import random
 
 #TODO implement this in game
 #region input validation
-def validate_input(prompt, valid_inputs):
+def validate_input(prompt : str, valid_inputs : list[str]):
     while True:
         console.print(prompt, style="bold cyan")
         user_input = input("> ").lower()
@@ -67,8 +67,6 @@ while not next_room:
 
 
 #next room
-
-
 console.print(f"The passageway leads to an open area which looks like an arena of some sort", style="bold cyan")
 console.print(f"You are suddenly attacked by a star-nosed mole and a bat!!!", style="bold red")
 
@@ -93,8 +91,8 @@ while not next_room:
             else:
                 player_health = player_health - 4
                 console.print("The enemy " + enemies[counter] + " attacked you!!!. You lost 4 health", style="bold red")
-                console.print("You are now at " + str(player_health) + " health!!", style="bold red")
-              
+                console.print("You are now at " + str(player_health) + " health!!", style="bold red")]
+
     if action == "explore":
         next_room = True
         console.print("You notice a tight passageway, and squeeze through", style = "italic green")

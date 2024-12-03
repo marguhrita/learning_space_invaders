@@ -1,6 +1,5 @@
-num1 = input("Please enter your first number\n")
-num2 = input("Please enter your second number\n")
+word = input("Please enter a word!")
 
-answer = int(num1) + int(num2)
+word_length = len(word)
 
-print("Your answer is: " + str(answer))
+print("Your word is " + str(word_length) + " letters long")
