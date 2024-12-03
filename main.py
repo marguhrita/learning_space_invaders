@@ -289,22 +289,18 @@ def spaceship_move(ship, key):
 	speed = 8
 	#get key press
 	if key[pygame.K_LEFT] and ship.left > 0:
-		ship.x -= speed
+		ship.x -= speed	
 	if key[pygame.K_RIGHT] and ship.right < screen_width:
 		ship.x += speed
 
-	return ship.x
-
 #<==============================END CODE HERE=============================>
-
+	return ship.x
 #endregion
 
-#region Task 3
-#<==================================TASK 3==========================================>
+#region Helper Functions 
 def spaceship_shoot(ship, key):
 	#Get time of last shot as a global variable
 	global last_shot
-#<==============================START CODE HERE=============================>
 	#record current time
 	time_now = pygame.time.get_ticks()
 	#set a cooldown variable
@@ -315,10 +311,7 @@ def spaceship_shoot(ship, key):
 		bullet = Bullets(ship.centerx, ship.top)
 		bullet_group.add(bullet)
 		last_shot = time_now
-#<==============================END CODE HERE=============================>
-#endregion
 
-#region Helper Functions
 #Helper function to update sprites
 def update_sprites():
 	#update spaceship
@@ -330,10 +323,8 @@ def update_sprites():
 	return game_over
 
 def shoot_alien_bullet(x,y):
-	global last_alien_shot
 	alien_bullet = Alien_Bullets(x, y)
 	alien_bullet_group.add(alien_bullet)
-	last_alien_shot = time_now
 #endregion
 
 #region main game loop
@@ -346,6 +337,8 @@ while run:
 
 	#region Task 4
 	#<==================================TASK 4==========================================>
+	#This is the list of all the aliens in the game
+	aliens_list = alien_group.sprites()
 	#<==============================START CODE HERE=====================================>
 	if countdown == 0:
 		#create random alien bullets
@@ -353,8 +346,11 @@ while run:
 		time_now = pygame.time.get_ticks()
 		#shoot
 		if time_now - last_alien_shot > alien_cooldown and len(alien_bullet_group) < 40 and len(alien_group) > 0:
-			attacking_alien = random.choice(alien_group.sprites())
+			#attacking_alien = random.choice(aliens_list)
+			attacking_alien_index = random.randint(0, len(aliens_list)-1)
+			attacking_alien = aliens_list[attacking_alien_index]
 			shoot_alien_bullet(attacking_alien.x, attacking_alien.y)
+			last_alien_shot = time_now
 	
 	#<==============================END CODE HERE=====================================>
 	

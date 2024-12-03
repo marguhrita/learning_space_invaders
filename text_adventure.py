@@ -91,7 +91,7 @@ while not next_room:
             else:
                 player_health = player_health - 4
                 console.print("The enemy " + enemies[counter] + " attacked you!!!. You lost 4 health", style="bold red")
-                console.print("You are now at " + str(player_health) + " health!!", style="bold red")]
+                console.print("You are now at " + str(player_health) + " health!!", style="bold red")
 
     if action == "explore":
         next_room = True
